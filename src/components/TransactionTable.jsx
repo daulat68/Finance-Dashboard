@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ArrowUpRight, ArrowDownLeft, Pencil, Plus } from 'lucide-react';
+import { Search, ArrowUpRight, ArrowDownLeft, Pencil, Plus, Download } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import TransactionModal from './TransactionModel';
 
@@ -7,7 +7,6 @@ const TransactionTable = ({ transactions, onSave }) => {
     const { role } = useStore();
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('all');
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
 
@@ -33,6 +32,27 @@ const TransactionTable = ({ transactions, onSave }) => {
         return matchesSearch && matchesType;
     });
 
+    const downloadFile = (content, fileName, contentType) => {
+        const a = document.createElement("a");
+        const file = new Blob([content], { type: contentType });
+        a.href = URL.createObjectURL(file);
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    };
+
+    const exportToCSV = () => {
+        const headers = ['Merchant,Category,Date,Amount,Type,Status'];
+        const rows = filteredData.map(t => 
+            `${t.merchant},${t.category},${t.date},${t.amount},${t.type},${t.status}`
+        );
+        downloadFile([headers, ...rows].join("\n"), 'royal_transactions.csv', 'text/csv');
+    };
+
+    const exportToJSON = () => {
+        downloadFile(JSON.stringify(filteredData, null, 2), 'royal_transactions.json', 'application/json');
+    };
+
     return (
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-8 overflow-hidden transition-all duration-300">
             
@@ -43,11 +63,29 @@ const TransactionTable = ({ transactions, onSave }) => {
                 onSave={handleModalSave}
                 initialData={editingTransaction} />
 
-            <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
+            <div className="p-4 sm:p-6 border-b border-slate-50 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
+                    <div className="flex gap-3 mt-2">
+                        <button 
+                            onClick={exportToCSV} 
+                            title="Export as CSV"
+                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/10 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all border border-indigo-100/50 dark:border-indigo-400/10 active:scale-95"
+                        >
+                            <Download size={14} /> CSV
+                        </button>
+                        <button 
+                            onClick={exportToJSON} 
+                            title="Export as JSON"
+                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-500/10 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all border border-indigo-100/50 dark:border-indigo-400/10 active:scale-95"
+                        >
+                            <Download size={14} /> JSON
+                        </button>
+                    </div>
+                </div>
                 
                 <div className="flex flex-wrap items-center gap-3">
-                    <div className="relative">
+                    <div className="relative flex-1 md:flex-none">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18}/>
                         <input 
                             type="text" 
@@ -70,14 +108,14 @@ const TransactionTable = ({ transactions, onSave }) => {
                             onClick={handleAddClick}
                             className="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700 transition-all flex items-center gap-2 active:scale-95 shadow-md shadow-indigo-200 dark:shadow-none"
                         >
-                            <Plus size={16} /> Add Transaction
+                            <Plus size={16} /> <span className="hidden xs:inline">Add Transaction</span>
                         </button>
                     )}
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[700px]">
                     <thead>
                         <tr className="text-slate-400 dark:text-slate-500 uppercase text-[11px] font-bold tracking-wider">
                             <th className="px-6 py-4">Transaction</th>
@@ -101,12 +139,12 @@ const TransactionTable = ({ transactions, onSave }) => {
                                             }`}>
                                                 {t.type === 'income' ? <ArrowDownLeft size={16} /> : <ArrowUpRight size={16} />}
                                             </div>
-                                            <span className="font-semibold text-slate-700 dark:text-slate-200">{t.merchant}</span>
+                                            <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">{t.merchant}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{t.category}</td>
                                     <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{t.date}</td>
-                                    <td className={`px-6 py-4 font-bold ${t.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-100'}`}>
+                                    <td className={`px-6 py-4 font-bold text-sm ${t.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-100'}`}>
                                         {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
                                     </td>
                                     <td className="px-6 py-4">
@@ -124,7 +162,7 @@ const TransactionTable = ({ transactions, onSave }) => {
                                                 onClick={() => handleEditClick(t)}
                                                 className="text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 ml-auto text-xs font-bold px-3 py-1 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-all"
                                             >
-                                                <Pencil size={14} /> Edit
+                                                <Pencil size={14} /> <span className="hidden xs:inline">Edit</span>
                                             </button>
                                         </td>
                                     )}

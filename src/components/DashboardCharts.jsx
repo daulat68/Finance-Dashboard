@@ -27,10 +27,10 @@ const DashboardCharts = ({trendData, categoryData}) =>{
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             
-            <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 min-w-0">
+            <div className="lg:col-span-2 bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 min-w-0 overflow-hidden">
                 <h3 className="text-lg font-bold mb-6 text-slate-900 dark:text-white">Balance Trend</h3>
                 <div className="w-full min-w-0">
-                    <ResponsiveContainer width="99%" height={300}>
+                    <ResponsiveContainer width="100%" height={300}>
                         <AreaChart data={trendData}>
                             <defs>
                                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -47,11 +47,11 @@ const DashboardCharts = ({trendData, categoryData}) =>{
                                 dataKey="name" 
                                 axisLine={false} 
                                 tickLine={false} 
-                                tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}/>
+                                tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 10 }}/>
                             <YAxis 
                                 axisLine={false} 
                                 tickLine={false} 
-                                tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}/>
+                                tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 10 }}/>
                             <Tooltip {...tooltipStyle} />
                             <Area 
                                 type="monotone" 
@@ -66,10 +66,10 @@ const DashboardCharts = ({trendData, categoryData}) =>{
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 min-w-0">
+            <div className="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 min-w-0 overflow-hidden">
                 <h3 className="text-lg font-bold mb-6 text-slate-900 dark:text-white">Spending Breakdown</h3>
                 <div className="w-full min-w-0">
-                    <ResponsiveContainer width="99%" height={250}>
+                    <ResponsiveContainer width="100%" height={250}>
                         <PieChart>
                             <Pie 
                                 data={categoryData} 
@@ -88,17 +88,17 @@ const DashboardCharts = ({trendData, categoryData}) =>{
                     </ResponsiveContainer>
                 </div>
 
-                <div className="mt-6 space-y-3 max-h-32 overflow-y-auto custom-scrollbar">
+                <div className="mt-6 space-y-3 max-h-32 overflow-y-auto overflow-x-hidden custom-scrollbar">
                     {categoryData.map((item, idx) => (
-                        <div key={item.name} className="flex justify-between items-center text-sm">
-                            <div className="flex items-center gap-2">
+                        <div key={item.name} className="flex justify-between items-center text-sm gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
                                 <div 
-                                    className="w-2.5 h-2.5 rounded-full" 
+                                    className="w-2.5 h-2.5 rounded-full shrink-0" 
                                     style={{ backgroundColor: COLORS[idx % COLORS.length] }}
                                 ></div>
-                                <span className="text-slate-600 dark:text-slate-400 font-medium">{item.name}</span>
+                                <span className="text-slate-600 dark:text-slate-400 font-medium truncate">{item.name}</span>
                             </div>
-                            <span className="font-bold text-slate-900 dark:text-slate-200">
+                            <span className="font-bold text-slate-900 dark:text-slate-200 shrink-0">
                                 ${item.value.toLocaleString()}
                             </span>
                         </div>

@@ -51,26 +51,26 @@ function App() {
             <Routes>
               <Route path="/" element={
                 <div className="w-full pb-10">
-                  <header className="mb-8 px-8 pt-8">
-                    <h1 className="text-2xl font-bold tracking-normal text-slate-900 dark:text-white">
+                  <header className="mb-8 px-4 sm:px-8 pt-8">
+                    <h1 className="text-xl sm:text-2xl font-bold tracking-normal text-slate-900 dark:text-white">
                       Financial Overview
                     </h1>
-                    <p className="text-slate-500 dark:text-slate-400">
+                    <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400">
                       Welcome, here's what's happening with your money.
                     </p>
                   </header>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8 pb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-8 pb-6">
                     <StatCard title="Total Balance" amount={summary.totalBalance} type="balance" trend={12.5}/>
                     <StatCard title="Total Income" amount={summary.totalIncome} type="income" trend={8.2}/>
                     <StatCard title="Total Expenses" amount={summary.totalExpenses} type="expense" trend={-4.3} />
                   </div>
 
-                  <div className="px-8 pb-8">
+                  <div className="px-4 sm:px-8 pb-8">
                     <DashboardCharts trendData={trendData} categoryData={categoryData} />
                   </div>
 
-                  <div className="px-8 pb-8" id="recent-transactions">
+                  <div className="px-4 sm:px-8 pb-8" id="recent-transactions">
                     <TransactionTable 
                       transactions={transactions}
                       onSave={handleSaveTransaction}
