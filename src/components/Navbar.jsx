@@ -20,7 +20,7 @@ const Navbar = () =>{
                     {isDark ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
 
-                <div className="hidden xs:flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl transition-colors">
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl transition-colors">
                     <button onClick={() => setRole('admin')}
                         className={`px-2 sm:px-4 py-1 text-[10px] sm:text-xs font-bold rounded-lg transition-all ${
                             role === 'admin' 

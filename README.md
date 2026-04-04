@@ -2,7 +2,7 @@
 
 A **Modern Minimalist** personal finance dashboard designed for clarity, speed, and deep financial insights. This application provides a high-end interface for tracking transactions, analyzing spending patterns, and managing wealth with a focus on a seamless user experience across all devices.
 
-#### Live Link:- 
+#### Live Link:- https://finance-dashboard-f.netlify.app
 
 ---
 
