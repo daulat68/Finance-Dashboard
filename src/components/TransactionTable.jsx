@@ -115,7 +115,7 @@ const TransactionTable = ({ transactions, onSave }) => {
             </div>
 
             <div className="overflow-x-auto custom-scrollbar">
-                <table className="w-full text-left border-collapse min-w-[700px]">
+                <table className="w-full text-left border-collapse min-w-175">
                     <thead>
                         <tr className="text-slate-400 dark:text-slate-500 uppercase text-[11px] font-bold tracking-wider">
                             <th className="px-6 py-4">Transaction</th>
